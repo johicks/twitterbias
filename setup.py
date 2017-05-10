@@ -10,13 +10,13 @@ with open('LICENSE') as f:
     license = f.read()
 
 setup(
-    name='sample',
+    name='twitterbias',
     version='0.1.0',
-    description='Sample package for Python-Guide.org',
+    description='Twitter Sentiment Analysis',
     long_description=readme,
-    author='Kenneth Reitz',
-    author_email='me@kennethreitz.com',
-    url='https://github.com/kennethreitz/samplemod',
+    author='Josh Hicks',
+    author_email='josh.hicks@live.com',
+    url='https://github.com/johicks/twitterbias',
     license=license,
     packages=find_packages(exclude=('tests', 'docs'))
 )
