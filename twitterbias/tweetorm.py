@@ -6,19 +6,14 @@ from sqlalchemy import create_engine
 
 Base = declarative_base()
 
-class Trump(Base):
-    __tablename__ = 'trump'
+class TweetDB(Base):
+    __tablename__ = 'tweetdb'
     tweet_id = Column(Integer, primary_key=True)
+    tweet_user_id = Column(String(250), nullable=False)
     created_at = Column(DateTime())
     text = Column(String(250), nullable=False)
-    semantic_score = Column(Integer)
-
-class Clinton(Base):
-    __tablename__ = 'clinton'
-    tweet_id = Column(Integer, primary_key=True)
-    created_at = Column(DateTime())
-    text = Column(String(250), nullable=False)
-    semantic_score = Column(Integer)
+    sentiment_polarity = Column(Integer)
+    sentiment_subjectivity = Column(Integer)
 
 engine = create_engine('sqlite:///sqlalchemy_tweets.db')
 
