@@ -6,6 +6,7 @@ import sqlalchemy
 import twitterbias.tweetorm
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy_utils import database_exists
 
 
 def test_tweetorm():
@@ -13,6 +14,7 @@ def test_tweetorm():
     twitterbias.tweetorm.Base.metadata.bind = engine
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
+    twitterbias.tweetorm.Base.metadata.create_all(engine)
     assert os.path.isfile('sqlalchemy_tweets.db')
     os.remove('sqlalchemy_tweets.db')
 
