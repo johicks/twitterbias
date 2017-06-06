@@ -53,7 +53,7 @@ class TweetVis:
                 x.append(row.sentiment_polarity)
                 y.append(row.sentiment_subjectivity)
         except NoResultFound:
-            logging.error('No tweets found in DB for @realDonaldTrump')
+            logging.error('No tweets found in DB for @HillaryClinton')
         df['x'] = x
         df['y'] = y
         sns.lmplot('x', 'y',

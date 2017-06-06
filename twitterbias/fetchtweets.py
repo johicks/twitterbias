@@ -32,6 +32,7 @@ class FetchTweets:
                     )
                 self.session.add(new_tweet)
                 self.session.commit()
+                logging.debug('Added new Tweet from user %s with ID %s', twitteruser, tweet.id)
 
 
 if __name__ == '__main__':
