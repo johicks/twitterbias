@@ -1,3 +1,4 @@
+"""Module to visualize sentiment data into scatter charts"""
 import logging
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -11,61 +12,42 @@ from sqlalchemy.orm.exc import NoResultFound
 
 
 class TweetVis:
+    """Generic class to connect to DB and visualize data"""
 
-    def __init__(self):
-        self.engine = create_engine('sqlite:///sqlalchemy_tweets.db')
+    def __init__(self, userids):
+        """Class constructor or initialization method"""
+        self.userids = userids
+        self.engine = create_engine('sqlite:///sqlalchemy_{0}_{1}.db'.format(*userids))
         Base.metadata.bind = self.engine
         self.DBSession = sessionmaker(bind=self.engine)
         self.session = self.DBSession()
 
-    def vis_trump_data(self):
-        x = []
-        y = []
-        df = pd.DataFrame()
 
-        try:
-            instance = self.session.query(TweetDB).filter(TweetDB.tweet_user_id == 'realDonaldTrump').all()
-            for row in instance:
-                x.append(row.sentiment_polarity)
-                y.append(row.sentiment_subjectivity)
-        except NoResultFound:
-            logging.error('No tweets found in DB for @realDonaldTrump')
-        df['x'] = x
-        df['y'] = y
-        sns.lmplot('x', 'y',
-                   data=df,
-                   fit_reg=False,
-                   scatter_kws={"marker": "D", "s": 100})
-        plt.title('@realDonaldTrump')
-        plt.xlabel('Sentiment Polarity')
-        plt.ylabel('Sentiment Subjectivity')
-        plt.savefig('trump.png')
+    def vis_data(self):
+        """Query DB for userids(list) and assign polarity to x axis and subjectivity to y axis"""
+        for userid in self.userids:
+            x = []
+            y = []
+            df = pd.DataFrame()
 
-    
-    def vis_clinton_data(self):
-        x = []
-        y = []
-        df = pd.DataFrame()
-
-        try:
-            instance = self.session.query(TweetDB).filter(TweetDB.tweet_user_id == 'HillaryClinton').all()
-            for row in instance:
-                x.append(row.sentiment_polarity)
-                y.append(row.sentiment_subjectivity)
-        except NoResultFound:
-            logging.error('No tweets found in DB for @HillaryClinton')
-        df['x'] = x
-        df['y'] = y
-        sns.lmplot('x', 'y',
-                   data=df,
-                   fit_reg=False,
-                   scatter_kws={"marker": "D", "s": 100})
-        plt.title('@HillaryClinton')
-        plt.xlabel('Sentiment Polarity')
-        plt.ylabel('Sentiment Subjectivity')
-        plt.savefig('clinton.png')
+            try:
+                instance = self.session.query(TweetDB).filter(TweetDB.tweet_user_id == userid).all()
+                for row in instance:
+                    x.append(row.sentiment_polarity)
+                    y.append(row.sentiment_subjectivity)
+            except NoResultFound:
+                logging.error('No tweets found in DB for @%s', userid)
+            df['x'] = x
+            df['y'] = y
+            sns.lmplot('x', 'y',
+                       data=df,
+                       fit_reg=False,
+                       scatter_kws={"marker": "D", "s": 100})
+            plt.title('@{0}'.format(userid))
+            plt.xlabel('Sentiment Polarity')
+            plt.ylabel('Sentiment Subjectivity')
+            plt.savefig('{0}.png'.format(userid))
 
 if __name__ == '__main__':
-    tweetvis = TweetVis()
-    tweetvis.vis_trump_data()
-    tweetvis.vis_clinton_data()
+    TV = TweetVis(['realDonaldTrump', 'HillaryClinton'])
+    TV.vis_data()

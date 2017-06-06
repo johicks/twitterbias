@@ -2,7 +2,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
-
+from sqlalchemy_utils import database_exists
 
 Base = declarative_base()
 
@@ -15,6 +15,8 @@ class TweetDB(Base):
     sentiment_polarity = Column(Integer)
     sentiment_subjectivity = Column(Integer)
 
-engine = create_engine('sqlite:///sqlalchemy_tweets.db')
+def create_db(userids):
+    engine = create_engine('sqlite:///sqlalchemy_{0}_{1}.db'.format(*userids))
 
-Base.metadata.create_all(engine)
+    if not database_exists(engine.url):
+        Base.metadata.create_all(engine)
