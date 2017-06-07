@@ -1,7 +1,6 @@
 """Command line client to perform sentiment analysis of two twitter users"""
 import argparse
 import logging
-import sys
 import fetchtweets
 import tweetsentiment
 import tweetvis

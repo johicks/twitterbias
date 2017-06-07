@@ -47,6 +47,7 @@ class TweetVis:
             plt.xlabel('Sentiment Polarity')
             plt.ylabel('Sentiment Subjectivity')
             plt.savefig('{0}.png'.format(userid))
+            logging.info('Created new chart: %s.png', userid)
 
 if __name__ == '__main__':
     TV = TweetVis(['realDonaldTrump', 'HillaryClinton'])
