@@ -91,3 +91,9 @@ ENV/
 
 # Configs
 *.cfg
+
+# Images
+*.png
+
+# DBs
+*.db
